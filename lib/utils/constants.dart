@@ -1,0 +1,1 @@
+// Constantes como colores, strings y estilos.
