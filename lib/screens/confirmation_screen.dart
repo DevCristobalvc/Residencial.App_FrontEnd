@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'pin_entry_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -44,7 +45,11 @@ class _HomeScreenState extends State<HomeScreen> {
                   padding: const EdgeInsets.all(32.0),
                   child: InkWell(
                     onTap: () {
-                      // Handle button press
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => PinEntryScreen()),
+                      );
                     },
                     child: Container(
                       width: 150,
