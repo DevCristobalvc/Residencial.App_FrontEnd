@@ -8,8 +8,35 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State {
   // Add any state variables you need for the screen
+  String username = '';
+  String lastRegistration = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUserData();
+  }
+
+  Future<void> fetchUserData() async {
+    try {
+      final response =
+          await http.get(Uri.parse('http://localhost:4000/Route/users/1'));
+
+      if (response.statusCode == 200) {
+        final userData = json.decode(response.body);
+        setState(() {
+          username = userData['username'];
+          lastRegistration = userData['fechatest'];
+        });
+      } else {
+        throw Exception('Failed to load user data');
+      }
+    } catch (error) {
+      print('Error fetching user data: $error');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              'Hola CRISTOBAL, ultimo registro 7:33 am',
+              'Hola $username !!\n\nULTIMO REGISTRO:\n$lastRegistration',
               style: TextStyle(color: Colors.white, fontSize: 20),
               textAlign: TextAlign.center,
             ),
