@@ -20,7 +20,8 @@ class _LoginScreenState extends State<LoginScreen> {
     });
 
     final response = await http.post(
-      Uri.parse('http://localhost:4000/Auth/login_off_jwt'),
+      Uri.parse(
+          'https://residencialapp-backend-12922e855f9c.herokuapp.com/Auth/login_off_jwt'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },

@@ -21,8 +21,8 @@ class _HomeScreenState extends State {
 
   Future<void> fetchUserData() async {
     try {
-      final response =
-          await http.get(Uri.parse('http://localhost:4000/Route/users/1'));
+      final response = await http.get(Uri.parse(
+          'https://residencialapp-backend-12922e855f9c.herokuapp.com/Route/users/1'));
 
       if (response.statusCode == 200) {
         final userData = json.decode(response.body);

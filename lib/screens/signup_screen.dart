@@ -21,7 +21,8 @@ class _SignupScreenState extends State<SignupScreen> {
     });
 
     final response = await http.post(
-      Uri.parse('http://localhost:4000/Auth/signup'),
+      Uri.parse(
+          'https://residencialapp-backend-12922e855f9c.herokuapp.com/Auth/signup'),
       headers: <String, String>{
         'Content-Type': 'application/json',
       },
