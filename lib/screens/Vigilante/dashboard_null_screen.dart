@@ -100,7 +100,7 @@ class ChartsWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(16.0),
             ),
             child: charts.PieChart<String>(
-              _createData(),
+              _createPieData(),
               animate: true,
               defaultRenderer: charts.ArcRendererConfig<String>(
                 arcWidth: 60,
@@ -121,15 +121,17 @@ class ChartsWidget extends StatelessWidget {
               color: Color(0xFFE9ECEF),
               borderRadius: BorderRadius.circular(16.0),
             ),
-            child:
-                Placeholder(), // Aquí puedes agregar el gráfico de historial de entrada y salida
+            child: charts.TimeSeriesChart(
+              _createLineData(),
+              animate: true,
+            ),
           ),
         ),
       ],
     );
   }
 
-  List<charts.Series<ChartData, String>> _createData() {
+  List<charts.Series<ChartData, String>> _createPieData() {
     final data = [
       ChartData('Dentro', 63, color: Colors.green),
       ChartData('Fuera', 70, color: Colors.red),
@@ -147,6 +149,39 @@ class ChartsWidget extends StatelessWidget {
       )
     ];
   }
+
+  List<charts.Series<TimeSeriesData, DateTime>> _createLineData() {
+    final dataEntrada = [
+      TimeSeriesData(DateTime(2024, 5, 10), 50),
+      TimeSeriesData(DateTime(2024, 5, 11), 45),
+      TimeSeriesData(DateTime(2024, 5, 12), 30),
+      TimeSeriesData(DateTime(2024, 5, 13), 70),
+    ];
+
+    final dataSalida = [
+      TimeSeriesData(DateTime(2024, 5, 10), 60),
+      TimeSeriesData(DateTime(2024, 5, 11), 40),
+      TimeSeriesData(DateTime(2024, 5, 12), 50),
+      TimeSeriesData(DateTime(2024, 5, 13), 80),
+    ];
+
+    return [
+      charts.Series<TimeSeriesData, DateTime>(
+        id: 'Entrada',
+        domainFn: (TimeSeriesData data, _) => data.time,
+        measureFn: (TimeSeriesData data, _) => data.value,
+        data: dataEntrada,
+        colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
+      ),
+      charts.Series<TimeSeriesData, DateTime>(
+        id: 'Salida',
+        domainFn: (TimeSeriesData data, _) => data.time,
+        measureFn: (TimeSeriesData data, _) => data.value,
+        data: dataSalida,
+        colorFn: (_, __) => charts.MaterialPalette.red.shadeDefault,
+      ),
+    ];
+  }
 }
 
 class ChartData {
@@ -155,4 +190,11 @@ class ChartData {
   final Color color;
 
   ChartData(this.label, this.value, {this.color = const Color(0xFF000000)});
+}
+
+class TimeSeriesData {
+  final DateTime time;
+  final int value;
+
+  TimeSeriesData(this.time, this.value);
 }
