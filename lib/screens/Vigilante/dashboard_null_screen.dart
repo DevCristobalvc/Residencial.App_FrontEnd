@@ -71,6 +71,13 @@ class UserInfoWidget extends StatelessWidget {
           Text('Nombre: Juan Pérez'),
           Text('Celular: 123-456-7890'),
           Text('Último Registro: 12/05/2024 10:30 AM'),
+          SizedBox(height: 60.0), // Espacio adicional antes de la imagen
+          Image.asset(
+            'images/carro.png', // Reemplaza con la ruta correcta de tu imagen
+            height: 330.0,
+            width: 550.0,
+            fit: BoxFit.cover,
+          ),
         ],
       ),
     );
