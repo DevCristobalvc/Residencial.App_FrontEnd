@@ -92,13 +92,13 @@ class ChartsWidget extends StatelessWidget {
               color: Color(0xFFE9ECEF),
               borderRadius: BorderRadius.circular(16.0),
             ),
-            child: charts.PieChart(
+            child: charts.PieChart<String>(
               _createData(),
               animate: true,
-              defaultRenderer: charts.ArcRendererConfig(
+              defaultRenderer: charts.ArcRendererConfig<String>(
                 arcWidth: 60,
                 arcRendererDecorators: [
-                  charts.ArcLabelDecorator(
+                  charts.ArcLabelDecorator<String>(
                     labelPosition: charts.ArcLabelPosition.outside,
                   ),
                 ],
