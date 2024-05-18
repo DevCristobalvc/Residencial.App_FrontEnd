@@ -39,7 +39,7 @@ class LoginRolesScreen extends StatelessWidget {
               const SizedBox(height: 30),
               ...[
                 {'role': 'Residente', 'route': LoginScreen()},
-                {'role': 'Vigilante', 'route': DashboardView()},
+                {'role': 'Supervisor', 'route': DashboardView()},
                 {
                   'role': 'Administrador',
                   'route': Placeholder()

@@ -69,6 +69,8 @@ class UserInfoWidget extends StatelessWidget {
           SizedBox(height: 20.0),
           Text('Placa: ABC123'),
           Text('Nombre: Juan Pérez'),
+          Text('Torre: A'),
+          Text('Apartamento: 1208'),
           Text('Celular: 123-456-7890'),
           Text('Último Registro: 12/05/2024 10:30 AM'),
           SizedBox(height: 60.0), // Espacio adicional antes de la imagen
