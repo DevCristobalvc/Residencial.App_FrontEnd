@@ -1,7 +1,6 @@
-// Pantalla de selección de roles.
-
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
+import 'Vigilante/dashboard_null_screen.dart';
 
 class LoginRolesScreen extends StatelessWidget {
   const LoginRolesScreen({Key? key}) : super(key: key);
@@ -11,7 +10,7 @@ class LoginRolesScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: Color(0xFF808080), // Fondo blanco para la pantalla
       appBar: AppBar(
-        title: const Text('LoginRoles'),
+        title: const Text('Residencial.App'),
         centerTitle: true,
         backgroundColor: Colors.transparent, // AppBar transparente
         elevation: 0, // Sin sombra
@@ -38,22 +37,29 @@ class LoginRolesScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 30),
-              ...['Residente', 'Vigilante', 'Administrador', 'Ayuda'].map(
-                (String role) => Padding(
+              ...[
+                {'role': 'Residente', 'route': LoginScreen()},
+                {'role': 'Vigilante', 'route': DashboardView()},
+                {
+                  'role': 'Administrador',
+                  'route': Placeholder()
+                }, // Agrega la pantalla correspondiente
+                {
+                  'role': 'Ayuda',
+                  'route': Placeholder()
+                } // Agrega la pantalla correspondiente
+              ].map(
+                (Map<String, dynamic> roleData) => Padding(
                   padding: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ElevatedButton(
                     onPressed: () {
-                      if (role == 'Residente') {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => LoginScreen()),
-                        );
-                      } else {
-                        // Aquí puedes manejar otros roles o mostrar un mensaje
-                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => roleData['route']),
+                      );
                     },
-                    child: Text(role),
+                    child: Text(roleData['role']),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Color(
                           0xFF6C757D), // Color gris oscuro para el fondo del botón
