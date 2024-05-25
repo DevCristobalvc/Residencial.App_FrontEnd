@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'login_screen.dart';
-import 'Vigilante/dashboard_null_screen.dart';
+import 'Vigilante/dashboard_screen.dart';
 
 class LoginRolesScreen extends StatelessWidget {
   const LoginRolesScreen({Key? key}) : super(key: key);
