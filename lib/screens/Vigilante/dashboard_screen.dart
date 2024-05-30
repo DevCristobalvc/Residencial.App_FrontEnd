@@ -37,8 +37,8 @@ class _DashboardViewState extends State<DashboardView> {
   }
 
   Future<List<DashBoardItem>> fetchDashBoardItems() async {
-    final response =
-        await http.get(Uri.parse('http://localhost:4000/Supervisor/dashboard'));
+    final response = await http
+        .get(Uri.parse('http://localhost:4000/registro/usuarios-validos'));
 
     if (response.statusCode == 200) {
       List jsonResponse = json.decode(response.body);
@@ -48,12 +48,47 @@ class _DashboardViewState extends State<DashboardView> {
     }
   }
 
+  Future<void> validarRegistro() async {
+    if (selectedItem != null) {
+      final response = await http.post(
+        Uri.parse('http://localhost:4000/registro/validar'),
+        body: json.encode({'placa': selectedItem!.placa}),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        print('Registro validado correctamente');
+        setState(() {
+          futureDashBoardItems = fetchDashBoardItems();
+        });
+      } else {
+        print('Error al validar el registro');
+      }
+    } else {
+      print('Selecciona un elemento antes de validar');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Dashboard'),
-        backgroundColor: Color.fromARGB(255, 83, 87, 92),
+        backgroundColor: Color(0xFF6C757D),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.check),
+            onPressed: validarRegistro,
+          ),
+          IconButton(
+            icon: Icon(Icons.replay_outlined),
+            onPressed: () {
+              setState(() {
+                futureDashBoardItems = fetchDashBoardItems();
+              });
+            },
+          ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -65,9 +100,15 @@ class _DashboardViewState extends State<DashboardView> {
             } else if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-              return Center(child: Text('No data found'));
+              return Center(child: Text('No hay residentes a la espera'));
             } else {
               final items = snapshot.data!;
+
+              // Asegúrate de que selectedItem sea uno de los elementos en la lista
+              if (selectedItem != null && !items.contains(selectedItem)) {
+                selectedItem = null;
+              }
+
               return Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -144,9 +185,8 @@ class UserInfoWidget extends StatelessWidget {
           Text('Celular: ${item.celular}'),
           Text('Último Registro: ${item.fecha}'),
           SizedBox(height: 20.0),
-          // Usamos Image.network con errorBuilder
           Image.network(
-            'https://cors-anywhere.herokuapp.com/${item.imagen}',
+            '${item.imagen}',
             height: 350.0,
             width: double.infinity,
             fit: BoxFit.cover,

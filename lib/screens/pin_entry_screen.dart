@@ -1,4 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 class PinEntryScreen extends StatefulWidget {
   @override
@@ -8,6 +10,15 @@ class PinEntryScreen extends StatefulWidget {
 class _PinEntryScreenState extends State<PinEntryScreen> {
   String _pin = '';
 
+  // Mapa que relaciona los PINs con los valores de URL respectivos
+  final Map<String, String> pinToUrl = {
+    '0301': 'REU63E',
+    '1102': 'NMM673',
+    '0103': 'CUL951',
+    '1001': 'SWC82D',
+    '1002': 'URUS',
+  };
+
   void _onNumberPress(String number) {
     setState(() {
       if (_pin.length < 4) {
@@ -15,6 +26,39 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
         _pin += number;
       }
     });
+  }
+
+  Future<void> _validatePin() async {
+    // Definir el endpoint base
+    var baseUrl = 'http://localhost:4000/registro/';
+
+    // Verificar si el PIN está en el mapa pinToUrl
+    if (pinToUrl.containsKey(_pin)) {
+      // Obtener el valor de URL correspondiente al PIN
+      var value = pinToUrl[_pin];
+
+      // Construir la URL completa con el valor de URL obtenido
+      var url = Uri.parse(baseUrl + value!);
+
+      // Realizar la solicitud HTTP GET
+      var response = await http.post(url);
+
+      // Verificar el código de estado de la respuesta
+      if (response.statusCode == 200) {
+        // El PIN se validó correctamente
+        print('PIN validado y estado actualizado exitosamente');
+        // Línea para reiniciar el valor del PIN y refrescar la página
+        setState(() {
+          _pin = '';
+        });
+      } else {
+        // Mostrar el mensaje de error
+        print('Error al validar el PIN: ${response.body}');
+      }
+    } else {
+      // El PIN ingresado no está en el mapa pinToUrl
+      print('PIN no válido');
+    }
   }
 
   Widget _buildNumberButton(String number) {
@@ -49,7 +93,7 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(
-            'Hola CRISTOBAL, ultimo registro 7:33 am',
+            'Hola CRISTOBAL, último registro 7:33 am',
             style: TextStyle(color: Colors.white, fontSize: 18),
             textAlign: TextAlign.center,
           ),
@@ -70,6 +114,10 @@ class _PinEntryScreenState extends State<PinEntryScreen> {
                     index == 9 ? '0' : (index + 1).toString());
               }),
             ),
+          ),
+          ElevatedButton(
+            onPressed: _validatePin,
+            child: Text('Validar PIN'),
           ),
         ],
       ),
